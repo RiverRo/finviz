@@ -107,7 +107,12 @@ def get_news(ticker):
     results = []
     date = None
     for row in rows:
-        raw_timestamp = row.xpath("./td")[0].xpath("text()")[0][0:-2]
+        row_tup = row.xpath("./td")
+        raw_timestamp = row_tup[0].xpath("text()")[0]
+        # This row is finviz advertisement and doesn't have this class
+        if not row_tup[1].cssselect('a[class="tab-link-news"]'):
+            continue
+ 
 
         if len(raw_timestamp) > 8:
             parsed_timestamp = datetime.strptime(raw_timestamp, "%b-%d-%y %I:%M%p")
@@ -119,7 +124,7 @@ def get_news(ticker):
         results.append((
             parsed_timestamp.strftime("%Y-%m-%d %H:%M"),
             row.xpath("./td")[1].cssselect('a[class="tab-link-news"]')[0].xpath("text()")[0],
-            row.xpath("./td")[1].cssselect('a[class="tab-link-news"]')[0].get("href"),
+            # row.xpath("./td")[1].cssselect('a[class="tab-link-news"]')[0].get("href"),
             row.xpath("./td")[1].cssselect('div[class="news-link-right"] span')[0].xpath("text()")[0][1:]
         ))
 
