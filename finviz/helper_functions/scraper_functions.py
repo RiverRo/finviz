@@ -41,7 +41,8 @@ def get_table(page_html: requests.Response, headers, rows=None, **kwargs):
 def get_total_rows(page_content):
     """ Returns the total number of rows(results). """
 
-    total_element = page_content.cssselect('td[width="128"]')
+    # total_element = page_content.cssselect('td[width="128"]')
+    total_element = page_content.cssselect('div[id="screener-total"]')
     if len(total_element) > 0:
         content = etree.tostring(total_element[0]).decode("utf-8")
         total_number = content.split("/")[1].split()[0]
